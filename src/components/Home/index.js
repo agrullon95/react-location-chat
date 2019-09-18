@@ -1,24 +1,21 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
+import React from 'react';
+import { compose } from 'recompose';
+
+import { withAuthorization, withEmailVerification } from '../Session';
+import Messages from '../Messages';
+
 const HomePage = () => (
   <div>
-    <h1>HomePage</h1>
+    <h1>Home Page</h1>
+    <p>The Home Page is accessible by every signed in user.</p>
+
+    <Messages />
   </div>
 );
-class SignUpForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-  onSubmit = event => {
-  }
-  onChange = event => {
-  };
-  render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-      </form>
-    );
-  }
-}
-export default HomePage;
+
+const condition = authUser => !!authUser;
+
+export default compose(
+  withEmailVerification,
+  withAuthorization(condition),
+)(HomePage);
